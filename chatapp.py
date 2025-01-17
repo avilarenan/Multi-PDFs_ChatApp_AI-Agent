@@ -25,7 +25,7 @@ def get_pdf_text(pdf_docs):
 
 
 def get_text_chunks(text):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=500)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=30000, chunk_overlap=1000)
     chunks = text_splitter.split_text(text)
     return chunks
 
@@ -60,7 +60,7 @@ def user_input(user_question):
     embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
     
     new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
-    docs = new_db.similarity_search(user_question)
+    docs = new_db.similarity_search(user_question, k=10)
 
     chain = get_conversational_chain()
 
